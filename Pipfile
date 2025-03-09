@@ -5,6 +5,11 @@ name = "pypi"
 
 [packages]
 flask = "*"
+flask-cors = "*"
+dotenv = "*"
+openai = "*"
+requests = "*"
+google-generativeai = "*"
 
 [dev-packages]
 pytest = "*"

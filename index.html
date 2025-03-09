@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrainRotLearn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #d946ef, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1000;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .category-btn.active {
+            background: linear-gradient(90deg, #d946ef, #f472b6);
+            color: white;
+        }
+        .explanation p {
+        margin-bottom: 1rem;
+        line-height: 1.6;
+        }   
+    </style>
+</head>
+<body class="bg-blue-50 text-gray-900">
+
+<header class="sticky-header flex justify-between p-5 shadow-md">
+    <h1 class="text-2xl font-bold gradient-text">brainrotlearn</h1>
+    <nav>
+        <a href="#categories" class="mr-4">Topics</a>
+        <a href="#about" class="mr-4">About</a>
+        <a href="mailto:danbalag@uwaterloo.ca" class="mr-4">Contact</a>
+        <a href="#input-section" class="mr-4 bg-pink-500 text-white px-4 py-2 rounded-lg">Get Started</a>
+    </nav>
+</header>
+
+<section class="text-center py-20">
+    <h2 class="text-4xl font-bold gradient-text">Learning Made Simple & Fun</h2>
+    <p class="text-gray-600 mt-3">Tired of searching up for the subreddit <span class="font-bold">r/explainlikeimfive</span> for stuff? We've got you covered!</p>
+</section>
+
+<section id="categories" class="px-10">
+    <h3 class="text-2xl font-semibold mb-5 gradient-text">Choose a Category</h3>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Science">
+            <div class="text-blue-500 text-4xl">🔬</div>
+            <h4 class="font-bold mt-2">Science</h4>
+            <p class="text-gray-600">From atoms to galaxies</p>
+        </div>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Math">
+            <div class="text-green-500 text-4xl">➗</div>
+            <h4 class="font-bold mt-2">Math</h4>
+            <p class="text-gray-600">Numbers made simple</p>
+        </div>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Technology">
+            <div class="text-yellow-500 text-4xl">💻</div>
+            <h4 class="font-bold mt-2">Technology</h4>
+            <p class="text-gray-600">How things work</p>
+        </div>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="History">
+            <div class="text-purple-500 text-4xl">📜</div>
+            <h4 class="font-bold mt-2">History</h4>
+            <p class="text-gray-600">Past events explained</p>
+        </div>
+        
+
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Art">
+            <div class="text-red-500 text-4xl">🎨</div>
+            <h4 class="font-bold mt-2">Art</h4>
+            <p class="text-gray-600">Creativity and expression</p>
+        </div>
+    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Law">
+        <div class="text-indigo-500 text-4xl">⚖️</div>
+        <h4 class="font-bold mt-2">Law</h4>
+        <p class="text-gray-600">Understanding rights and justice</p>
+    </div>
+    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Health & Fitness">
+        <div class="text-orange-500 text-4xl">🏋️</div>
+        <h4 class="font-bold mt-2">Health & Fitness</h4>
+        <p class="text-gray-600">Staying strong and healthy</p>
+    </div>
+    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Geography">
+        <div class="text-teal-500 text-4xl">🌍</div>
+        <h4 class="font-bold mt-2">Geography</h4>
+        <p class="text-gray-600">Exploring the world</p>
+    </div>     
+    </div>
+</section>
+
+
+<section id="input-section" class="text-center py-20">
+    <h3 class="text-2xl font-semibold gradient-text">Explain Like I'm 5</h3>
+    <input type="text" id="query" class="border p-3 w-1/2 mt-4 rounded-lg" placeholder="Type something...">
+    <button id="get-explanation" class="bg-pink-500 text-white px-6 py-3 rounded-lg mt-4">Explain</button>
+    <div id="explanation" class="mt-6 p-6 bg-white shadow-md rounded-lg hidden"></div>
+</section>
+
+<section id="about" class="text-center py-20 px-10 max-w-4xl mx-auto">
+    <h3 class="text-2xl font-semibold gradient-text">About BrainRotLearn</h3>
+    <p class="text-gray-600 mt-3">Ever found yourself doom-scrolling through Reddit at 2 AM, searching for someone to explain quantum physics in a way that doesn't make your brain hurt? We've been there. BrainRotLearn was born from countless hours spent hunting through forums, trying to find explanations that don't require a PhD to understand.</p>
+    <p class="text-gray-600 mt-3">BrainRotLearn explains complicated topics to you like you're 5 years old - but without the baby talk. We break down complex ideas into bite-sized, easy-to-understand chunks that stick in your memory. No jargon, no unnecessary complexity, just clear explanations that actually make sense.</p>
+    <p class="text-gray-600 mt-3">BrainRotLearn cuts through the noise to give you the understanding you need, quickly and painlessly.</p>
+</section>
+
+<script>
+    let selectedCategory = "";
+
+    document.querySelectorAll('.category-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            selectedCategory = button.getAttribute('data-category');
+            document.getElementById('query').placeholder = `Ask me anything about ${selectedCategory}`;
+            document.getElementById('input-section').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    document.getElementById('get-explanation').addEventListener('click', async () => {
+        const query = document.getElementById('query').value;
+        if (!query || !selectedCategory) return;
+        
+        const response = await fetch('http://localhost:5000/explain', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, category: selectedCategory })
+        });
+        
+        const data = await response.json();
+        const explanationDiv = document.getElementById('explanation');
+        
+        if (data.explanation) {
+            explanationDiv.innerHTML = `<h4 class='font-bold mb-2 gradient-text'>Explanation:</h4><p class="text-gray-700">${data.explanation}</p>`;
+            explanationDiv.classList.remove('hidden');
+            explanationDiv.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            explanationDiv.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
+            explanationDiv.classList.remove('hidden');
+        }
+    });
+</script>
+
+<footer class="border-t mt-20 py-8 px-10">
+    <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div>
+                <h2 class="text-xl font-bold gradient-text mb-4">brainrotlearn</h2>
+                <p class="text-gray-600">Making complex topics simple and fun to understand.</p>
+            </div>
+            
+        </div>
+        
+        <div class="text-center text-gray-500 text-sm mt-10">
+            © 2025 brainrotlearn. All rights reserved.
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
