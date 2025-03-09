@@ -20,7 +20,7 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Select the model
-model = genai.GenerativeModel("gemini-1.5-pro")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 # Backend route for explanation using Gemini
 @app.route('/explain', methods=['POST'])
