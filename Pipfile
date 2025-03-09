@@ -10,6 +10,7 @@ dotenv = "*"
 openai = "*"
 requests = "*"
 google-generativeai = "*"
+"google.generativeai" = "*"
 
 [dev-packages]
 pytest = "*"
