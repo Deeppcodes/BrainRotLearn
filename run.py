@@ -34,7 +34,7 @@ def explain():
     try:
         # Generate response using Gemini
         response = model.generate_content(
-            f"Explain it like I'm 5: {query}. Format your response with clear paragraph breaks every 2-3 sentences for readability."
+            f"Please explain the following topic simply and concisely but with proper explanation, as if you were explaining it to a 5-year-old: {query}. Format your response with clear paragraph breaks every 2-3 sentences for readability."
         )
         
         # Extract and format the explanation with proper paragraphs
