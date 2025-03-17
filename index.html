@@ -31,7 +31,7 @@
         .explanation-box {
             max-width: 800px;
             margin: 20px auto;
-            padding: 25px 15px 15px 15px; /* Increased top padding */
+            padding: 40px 15px 15px 15px; /* Increased top padding */
             background: #f9f9f9;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -54,6 +54,10 @@
         }
         .copy-btn:hover {
             background: #b02acc;
+        }
+
+        .explanation-text {
+            margin-top: 10px; /* Add space between copy button and text */
         }
     </style>
 </head>
@@ -218,7 +222,6 @@
             
             if (!explanationContainer) return;
 
-            // Replace the current explanation container code with this:
             if (data.explanation) {
                 // Process the explanation text to convert markdown-style bold (**text**) to HTML bold
                 let formattedExplanation = data.explanation.replace(/\n/g, '<br>');
@@ -228,20 +231,24 @@
                 explanationContainer.innerHTML = `
                     <div class="explanation-box">
                         <button id="copyButton" class="copy-btn">Copy</button>
-                        <p>${formattedExplanation}</p>
+                        <div class="explanation-text">
+                            <p>${formattedExplanation}</p>
+                        </div>
                     </div>
                 `;
                 
                 // Add the event listener directly to the button after creating it
-                document.getElementById('copyButton').addEventListener('click', function() {
+                document.getElementById('copyButton')?.addEventListener('click', function() {
                     const explanationText = document.querySelector(".explanation-box p").innerText;
                     navigator.clipboard.writeText(explanationText)
                         .then(() => {
                             const copyBtn = document.getElementById('copyButton');
-                            copyBtn.innerText = "Copied!";
-                            setTimeout(() => {
-                                copyBtn.innerText = "Copy";
-                            }, 2000);
+                            if (copyBtn) {
+                                copyBtn.innerText = "Copied!";
+                                setTimeout(() => {
+                                    copyBtn.innerText = "Copy";
+                                }, 2000);
+                            }
                         })
                         .catch(err => {
                             console.error("Failed to copy text:", err);
@@ -253,39 +260,16 @@
                 explanationContainer.scrollIntoView({ behavior: 'smooth' });
             } else {
                 console.error("Explanation not found in response:", data);
-                        explanationContainer.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
-                        explanationContainer.classList.remove('hidden');
-                    }
-                } catch (error) {
-                    console.error("Error fetching explanation:", error);
-                    alert("An error occurred while fetching the explanation.");
-                }
-            });
+                explanationContainer.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
+                explanationContainer.classList.remove('hidden');
+            }
+        } catch (error) {
+            console.error("Error fetching explanation:", error);
+            alert("An error occurred while fetching the explanation.");
+        }
+    });
 
-    // Function to copy text to clipboard
-    // Update this function in your script
-    function copyToClipboard() {
-        const explanationText = document.querySelector(".explanation-box p").innerHTML;
-    
-    // Create a temporary element to handle HTML content
-        const tempElement = document.createElement("div");
-        tempElement.innerHTML = explanationText;
-        const textToCopy = tempElement.innerText || tempElement.textContent;
-    
-        navigator.clipboard.writeText(textToCopy)
-            .then(() => {
-                const copyBtn = document.querySelector(".copy-btn");
-                const originalText = copyBtn.innerText;
-                copyBtn.innerText = "Copied!";
-                setTimeout(() => {
-                    copyBtn.innerText = originalText;
-                }, 2000);
-            })
-            .catch(err => {
-                console.error("Failed to copy text:", err);
-                alert("Failed to copy text to clipboard");
-            });
-    }
+    // Remove the standalone copyToClipboard function since we're now handling it inline
 </script>
 
 
