@@ -22,14 +22,39 @@
             z-index: 1000;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .category-btn.active {
+        .category-btn.active,
+        .style-btn.active {
             background: linear-gradient(90deg, #d946ef, #f472b6);
             color: white;
+            border: 2px solid #d946ef;
         }
-        .explanation p {
-        margin-bottom: 1rem;
-        line-height: 1.6;
-        }   
+        .explanation-box {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 25px 15px 15px 15px; /* Increased top padding */
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #d946ef;
+            color: white;
+            border: none;
+            padding: 5px 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 10; /* Ensure button is clickable */
+        }
+        .copy-btn:hover {
+            background: #b02acc;
+        }
     </style>
 </head>
 <body class="bg-blue-50 text-gray-900">
@@ -45,12 +70,12 @@
 </header>
 
 <section class="text-center py-20">
-    <h2 class="text-4xl font-bold gradient-text">Learning Made Simple & Fun</h2>
-    <p class="text-gray-600 mt-3">Tired of searching up for the subreddit <span class="font-bold">r/explainlikeimfive</span> for stuff? We've got you covered!</p>
+    <h2 class="text-4xl font-bold gradient-text">Unlock the depths of knowledge effortlessly.</h2>
+    <p class="text-gray-600 mt-3">No more endless searches or confusing explanations. Get instant answers, tailored to your learning style.</p>
 </section>
 
 <section id="categories" class="px-10">
-    <h3 class="text-2xl font-semibold mb-5 gradient-text">Choose a Category</h3>
+    <h3 class="text-2xl font-semibold mb-5 gradient-text">Pick a Category</h3>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Science">
             <div class="text-blue-500 text-4xl">🔬</div>
@@ -72,8 +97,6 @@
             <h4 class="font-bold mt-2">History</h4>
             <p class="text-gray-600">Past events explained</p>
         </div>
-        
-
         <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Art">
             <div class="text-red-500 text-4xl">🎨</div>
             <h4 class="font-bold mt-2">Art</h4>
@@ -98,12 +121,38 @@
 </section>
 
 
+<section id="input-section" class="px-10">
+    <h2 id="explanation-style-title" class="mt-8 mb-4 text-2xl font-semibold gradient-text">
+        Pick an Explanation Style
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="ELI5">
+            <div class="text-blue-500 text-3xl">🧒</div>
+            <h4 class="font-bold mt-2">Explain Like I'm 5</h4>
+            <p class="text-gray-600 mt-3">Tired of searching up for the subreddit <span class="font-bold">r/explainlikeimfive</span>?</p>
+        </div>
+        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="Student">
+            <div class="text-green-500 text-3xl">🎓</div>
+            <h4 class="font-bold mt-2">Student</h4>
+            <p class="text-gray-600 mt-3">Need a quick refresher on a topic?</p>
+        </div>
+        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="Grandparent">
+            <div class="text-gray-500 text-3xl">👵</div>
+            <h4 class="font-bold mt-2">Grandparent</h4>
+            <p class="text-gray-600 mt-3">Want to understand your grandkids?</p>
+        </div>
+    </div>
+    
+</section>
+
 <section id="input-section" class="text-center py-20">
-    <h3 class="text-2xl font-semibold gradient-text">Explain Like I'm 5</h3>
+    <h3 class="text-2xl font-semibold gradient-text">Enter the concept you want explained</h3>
     <input type="text" id="query" class="border p-3 w-1/2 mt-4 rounded-lg" placeholder="Type something...">
     <button id="get-explanation" class="bg-pink-500 text-white px-6 py-3 rounded-lg mt-4">Explain</button>
     <div id="explanation" class="mt-6 p-6 bg-white shadow-md rounded-lg hidden"></div>
 </section>
+
 
 <section id="about" class="text-center py-20 px-10 max-w-4xl mx-auto">
     <h3 class="text-2xl font-semibold gradient-text">About BrainRotLearn</h3>
@@ -114,49 +163,138 @@
 
 <script>
     let selectedCategory = "";
+    let selectedStyle = "";
 
+    // Handle category selection
     document.querySelectorAll('.category-btn').forEach(button => {
         button.addEventListener('click', () => {
             document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
             selectedCategory = button.getAttribute('data-category');
-            document.getElementById('query').placeholder = `Ask me anything about ${selectedCategory}`;
-            document.getElementById('input-section').scrollIntoView({ behavior: 'smooth' });
+            const queryInput = document.getElementById('query');
+            if (queryInput) {
+                queryInput.placeholder = `Ask me anything about ${selectedCategory}`;
+            }
+            document.getElementById('input-section')?.scrollIntoView({ behavior: 'smooth' });
         });
     });
 
-    document.getElementById('get-explanation').addEventListener('click', async () => {
-        const query = document.getElementById('query').value;
-        if (!query || !selectedCategory) return;
-        
-        const response = await fetch('http://localhost:5000/explain', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, category: selectedCategory })
+    // Handle explanation style selection
+    document.querySelectorAll('.style-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            selectedStyle = button.getAttribute('data-style');
         });
-        
-        const data = await response.json();
-        const explanationDiv = document.getElementById('explanation');
-        
-        if (data.explanation) {
-            explanationDiv.innerHTML = `<h4 class='font-bold mb-2 gradient-text'>Explanation:</h4><p class="text-gray-700">${data.explanation}</p>`;
-            explanationDiv.classList.remove('hidden');
-            explanationDiv.scrollIntoView({ behavior: 'smooth' });
-        } else {
-            explanationDiv.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
-            explanationDiv.classList.remove('hidden');
-        }
     });
+
+    // Handle explanation request
+    document.getElementById('get-explanation')?.addEventListener('click', async () => {
+        const queryInput = document.getElementById('query');
+        const query = queryInput?.value?.trim();
+        
+        if (!query || !selectedCategory || !selectedStyle) {
+            alert("Please select a category, explanation style, and enter a question.");
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:5000/explain', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    query, 
+                    category: selectedCategory, 
+                    style: selectedStyle 
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const explanationContainer = document.getElementById('explanation');
+            
+            if (!explanationContainer) return;
+
+            // Replace the current explanation container code with this:
+            if (data.explanation) {
+                // Process the explanation text to convert markdown-style bold (**text**) to HTML bold
+                let formattedExplanation = data.explanation.replace(/\n/g, '<br>');
+                // Convert markdown bold format to HTML
+                formattedExplanation = formattedExplanation.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                
+                explanationContainer.innerHTML = `
+                    <div class="explanation-box">
+                        <button id="copyButton" class="copy-btn">Copy</button>
+                        <p>${formattedExplanation}</p>
+                    </div>
+                `;
+                
+                // Add the event listener directly to the button after creating it
+                document.getElementById('copyButton').addEventListener('click', function() {
+                    const explanationText = document.querySelector(".explanation-box p").innerText;
+                    navigator.clipboard.writeText(explanationText)
+                        .then(() => {
+                            const copyBtn = document.getElementById('copyButton');
+                            copyBtn.innerText = "Copied!";
+                            setTimeout(() => {
+                                copyBtn.innerText = "Copy";
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error("Failed to copy text:", err);
+                            alert("Failed to copy text to clipboard");
+                        });
+                });
+                
+                explanationContainer.classList.remove('hidden');
+                explanationContainer.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                console.error("Explanation not found in response:", data);
+                        explanationContainer.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
+                        explanationContainer.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error("Error fetching explanation:", error);
+                    alert("An error occurred while fetching the explanation.");
+                }
+            });
+
+    // Function to copy text to clipboard
+    // Update this function in your script
+    function copyToClipboard() {
+        const explanationText = document.querySelector(".explanation-box p").innerHTML;
+    
+    // Create a temporary element to handle HTML content
+        const tempElement = document.createElement("div");
+        tempElement.innerHTML = explanationText;
+        const textToCopy = tempElement.innerText || tempElement.textContent;
+    
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                const copyBtn = document.querySelector(".copy-btn");
+                const originalText = copyBtn.innerText;
+                copyBtn.innerText = "Copied!";
+                setTimeout(() => {
+                    copyBtn.innerText = originalText;
+                }, 2000);
+            })
+            .catch(err => {
+                console.error("Failed to copy text:", err);
+                alert("Failed to copy text to clipboard");
+            });
+    }
 </script>
+
 
 <footer class="border-t mt-20 py-8 px-10">
     <div class="container mx-auto">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div>
                 <h2 class="text-xl font-bold gradient-text mb-4">brainrotlearn</h2>
-                <p class="text-gray-600">Making complex topics simple and fun to understand.</p>
             </div>
-            
         </div>
         
         <div class="text-center text-gray-500 text-sm mt-10">
