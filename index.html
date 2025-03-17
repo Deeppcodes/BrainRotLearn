@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Update the title with the emoji -->
     <title>LearnYourWay</title>
+    
+    <!-- Centered favicon with larger size -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 font-size=%2285%22>🧠</text></svg>" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dominant-baseline=%22central%22 font-size=%2285%22>🧠</text></svg>">
+    
+    <!-- Rest of your existing head content -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Add Poppins font for more playful typography -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
@@ -385,6 +392,39 @@
             color: #d946ef;
             text-decoration: underline;
         }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Clash Display', sans-serif;
+            font-weight: 600;
+            font-size: 1.75rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo:hover .logo-icon {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
@@ -419,7 +459,10 @@
 
     <!-- Rest of your existing body content, but add animation classes -->
     <header class="sticky-header flex justify-between p-5">
-        <h1 class="text-2xl font-bold hero-title">learnyourway</h1>
+        <a href="#" class="logo">
+            <span class="logo-icon">🧠</span>
+            <span class="logo-text">learnyourway</span>
+        </a>
         <nav class="stagger-children">
             <a href="#categories" class="mr-4 highlight-text">Topics</a>
             <a href="#about" class="mr-4 highlight-text">About</a>
