@@ -3,199 +3,723 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrainRotLearn</title>
+    <title>LearnYourWay</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Poppins font for more playful typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
+        /* Animated Background with Educational Elements */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: #0f172a;
+            overflow: hidden;
         }
+
+        .floating-icon {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 6s infinite;
+            font-size: 2rem;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
+        }
+
+        /* Playful Typography */
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleEntrance 1s ease-out;
+        }
+
+        .highlight-text {
+            color: #d946ef;
+            font-weight: 600;
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #d946ef, #f472b6);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+
+        .highlight-text:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Entrance Animations */
+        @keyframes titleEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            animation: fadeUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Stagger children animations */
+        .stagger-children > * {
+            opacity: 0;
+            animation: fadeUp 0.6s ease-out forwards;
+        }
+
+        .stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+        .stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+        .stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+        .stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #d946ef;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .explain-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .explain-btn:hover {
+            opacity: 0.9;
+        }
+
+        .style-btn, .category-btn {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .style-btn h4, .category-btn h4 {
+            color: #1a1a1a;
+        }
+
+        .style-btn p, .category-btn p {
+            color: #666666;
+        }
+
+        .style-btn.active h4, .category-btn.active h4,
+        .style-btn.active p, .category-btn.active p {
+            color: white;
+        }
+
+        .style-btn:hover, .category-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .gradient-text {
-            background: linear-gradient(90deg, #d946ef, #9333ea);
+            background: linear-gradient(45deg, #d946ef, #f472b6);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 1000;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+        .gradient-heading {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .category-btn.active,
-        .style-btn.active {
-            background: linear-gradient(90deg, #d946ef, #f472b6);
-            color: white;
-            border: 2px solid #d946ef;
-        }
+
+        /* Explanation box styles */
         .explanation-box {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 40px 15px 15px 15px; /* Increased top padding */
-            background: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
             position: relative;
-            word-wrap: break-word;
+            margin: 2rem auto;
+            max-width: 800px;
+            border: 2px solid rgba(217, 70, 239, 0.2);
+            color: white;
+        }
+
+        .explanation-text {
+            line-height: 1.6;
+            white-space: pre-wrap;
+            padding-right: 4rem; /* Add padding to prevent text overlap with copy button */
         }
 
         .copy-btn {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #d946ef;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(45deg, #d946ef, #f472b6);
             color: white;
             border: none;
-            padding: 5px 8px;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             cursor: pointer;
-            font-size: 12px;
-            z-index: 10; /* Ensure button is clickable */
-        }
-        .copy-btn:hover {
-            background: #b02acc;
+            transition: opacity 0.3s ease;
+            z-index: 10; /* Ensure button stays above text */
         }
 
-        .explanation-text {
-            margin-top: 10px; /* Add space between copy button and text */
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Error message styles */
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem auto;
+            max-width: 600px;
+        }
+
+        /* Loading animation styles */
+        .loading {
+            text-align: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .loading-dots {
+            display: inline-flex;
+            gap: 0.5rem;
+            margin-left: 0.5rem;
+        }
+
+        .loading-dots .dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        .loading-dots .dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            to { transform: translateY(-8px); }
+        }
+
+        /* Updated button styles */
+        .style-btn.active, .category-btn.active {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Enhanced animations */
+        .category-btn, .style-btn {
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .category-btn:hover, .style-btn:hover {
+            transform: translateY(-5px) scale(1.03);
+        }
+
+        .category-btn .text-4xl, .style-btn .text-4xl {
+            transition: transform 0.3s ease;
+        }
+
+        .category-btn:hover .text-4xl, .style-btn:hover .text-4xl {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* Fade in animation enhancement */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating animation for icons */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .floating-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .style-btn {
+            transition: all 0.3s ease;
+        }
+
+        .style-btn.active {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .style-btn.active h4,
+        .style-btn.active > p {  /* Only target the main description paragraph */
+            color: white;
+        }
+
+        .style-btn.active .bg-yellow-50,
+        .style-btn.active .bg-blue-50,
+        .style-btn.active .bg-purple-50 {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Apply white color to "Perfect for" text when active */
+        .style-btn.active .text-yellow-800,
+        .style-btn.active .text-blue-800,
+        .style-btn.active .text-purple-800 {
+            color: rgb(106, 37, 64);
+        }
+
+        .style-btn.active .text-yellow-700 li,
+        .style-btn.active .text-blue-700 li,
+        .style-btn.active .text-purple-700 li {
+            color: white;
+        }
+
+        .get-started-btn {
+            background: linear-gradient(45deg, #d946ef, #f472b6);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(217, 70, 239, 0.2);
+        }
+
+        .get-started-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(217, 70, 239, 0.3);
+        }
+
+        footer {
+            background: rgba(255, 255, 255, 0.03);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem 0;
+        }
+
+        .footer-content {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .footer-link {
+            color: #f472b6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            color: #d946ef;
+            text-decoration: underline;
         }
     </style>
 </head>
-<body class="bg-blue-50 text-gray-900">
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg" id="animatedBg"></div>
 
-<header class="sticky-header flex justify-between p-5 shadow-md">
-    <h1 class="text-2xl font-bold gradient-text">brainrotlearn</h1>
-    <nav>
-        <a href="#categories" class="mr-4">Topics</a>
-        <a href="#about" class="mr-4">About</a>
-        <a href="mailto:danbalag@uwaterloo.ca" class="mr-4">Contact</a>
-        <a href="#input-section" class="mr-4 bg-pink-500 text-white px-4 py-2 rounded-lg">Get Started</a>
-    </nav>
-</header>
+    <!-- Add this script to dynamically create floating icons -->
+    <script>
+        const icons = ['🧠', '💡', '📚', '🔬', '🧮', '💻', '🎨', '⚡'];
+        const bg = document.getElementById('animatedBg');
 
-<section class="text-center py-20">
-    <h2 class="text-4xl font-bold gradient-text">Unlock the depths of knowledge effortlessly.</h2>
-    <p class="text-gray-600 mt-3">No more endless searches or confusing explanations. Get instant answers, tailored to your learning style.</p>
-</section>
+        function createFloatingIcon() {
+            const icon = document.createElement('div');
+            icon.className = 'floating-icon';
+            icon.textContent = icons[Math.floor(Math.random() * icons.length)];
+            icon.style.left = Math.random() * 100 + 'vw';
+            icon.style.top = Math.random() * 100 + 'vh';
+            icon.style.animationDelay = Math.random() * 5 + 's';
+            bg.appendChild(icon);
 
-<section id="categories" class="px-10">
-    <h3 class="text-2xl font-semibold mb-5 gradient-text">Pick a Category</h3>
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Science">
-            <div class="text-blue-500 text-4xl">🔬</div>
-            <h4 class="font-bold mt-2">Science</h4>
-            <p class="text-gray-600">From atoms to galaxies</p>
+            // Remove the icon after animation
+            setTimeout(() => {
+                icon.remove();
+            }, 6000);
+        }
+
+        // Create new icons periodically
+        setInterval(createFloatingIcon, 2000);
+        // Initial icons
+        for(let i = 0; i < 10; i++) createFloatingIcon();
+    </script>
+
+    <!-- Rest of your existing body content, but add animation classes -->
+    <header class="sticky-header flex justify-between p-5">
+        <h1 class="text-2xl font-bold hero-title">learnyourway</h1>
+        <nav class="stagger-children">
+            <a href="#categories" class="mr-4 highlight-text">Topics</a>
+            <a href="#about" class="mr-4 highlight-text">About</a>
+            <a href="mailto:danbalag@uwaterloo.ca" class="mr-4 highlight-text">Contact</a>
+            <a href="#input-section" class="get-started-btn">Get Started</a>
+        </nav>
+    </header>
+
+    <!-- Update your sections with animation classes -->
+    <section class="text-center py-20 fade-up">
+        <h2 class="hero-title">Unlock the depths of knowledge effortlessly.</h2>
+        <p class="text-gray-300 mt-3">No more endless searches or confusing explanations. Get instant, multi-generational answers, personalized to your learning style.</p>
+    </section>
+
+    <section id="categories" class="px-10 fade-up">
+        <h3 class="text-2xl font-semibold mb-5 gradient-text">Pick a Category</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Science">
+                <div class="text-blue-500 text-4xl">🔬</div>
+                <h4 class="font-bold mt-2">Science</h4>
+                <p class="text-gray-600">From atoms to galaxies</p>
+            </div>
+            <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Math">
+                <div class="text-green-500 text-4xl">🔢</div>
+                <h4 class="font-bold mt-2">Math</h4>
+                <p class="text-gray-600">Numbers made simple</p>
+            </div>
+            <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Technology">
+                <div class="text-yellow-500 text-4xl">💻</div>
+                <h4 class="font-bold mt-2">Technology</h4>
+                <p class="text-gray-600">How things work</p>
+            </div>
+            <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="History">
+                <div class="text-purple-500 text-4xl">📜</div>
+                <h4 class="font-bold mt-2">History</h4>
+                <p class="text-gray-600">Past events explained</p>
+            </div>
+            <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Art">
+                <div class="text-red-500 text-4xl">🎨</div>
+                <h4 class="font-bold mt-2">Art</h4>
+                <p class="text-gray-600">Creativity and expression</p>
+            </div>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Law">
+            <div class="text-indigo-500 text-4xl">⚖️</div>
+            <h4 class="font-bold mt-2">Law</h4>
+            <p class="text-gray-600">Understanding rights and justice</p>
         </div>
-        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Math">
-            <div class="text-green-500 text-4xl">➗</div>
-            <h4 class="font-bold mt-2">Math</h4>
-            <p class="text-gray-600">Numbers made simple</p>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Health & Fitness">
+            <div class="text-orange-500 text-4xl">🏋️</div>
+            <h4 class="font-bold mt-2">Health & Fitness</h4>
+            <p class="text-gray-600">Staying strong and healthy</p>
         </div>
-        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Technology">
-            <div class="text-yellow-500 text-4xl">💻</div>
-            <h4 class="font-bold mt-2">Technology</h4>
-            <p class="text-gray-600">How things work</p>
+        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Geography">
+            <div class="text-teal-500 text-4xl">🌍</div>
+            <h4 class="font-bold mt-2">Geography</h4>
+            <p class="text-gray-600">Exploring the world</p>
+        </div>     
         </div>
-        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="History">
-            <div class="text-purple-500 text-4xl">📜</div>
-            <h4 class="font-bold mt-2">History</h4>
-            <p class="text-gray-600">Past events explained</p>
-        </div>
-        <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Art">
-            <div class="text-red-500 text-4xl">🎨</div>
-            <h4 class="font-bold mt-2">Art</h4>
-            <p class="text-gray-600">Creativity and expression</p>
-        </div>
-    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Law">
-        <div class="text-indigo-500 text-4xl">⚖️</div>
-        <h4 class="font-bold mt-2">Law</h4>
-        <p class="text-gray-600">Understanding rights and justice</p>
-    </div>
-    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Health & Fitness">
-        <div class="text-orange-500 text-4xl">🏋️</div>
-        <h4 class="font-bold mt-2">Health & Fitness</h4>
-        <p class="text-gray-600">Staying strong and healthy</p>
-    </div>
-    <div class="p-6 bg-white shadow-md rounded-lg text-center category-btn" data-category="Geography">
-        <div class="text-teal-500 text-4xl">🌍</div>
-        <h4 class="font-bold mt-2">Geography</h4>
-        <p class="text-gray-600">Exploring the world</p>
-    </div>     
-    </div>
-</section>
+    </section>
 
 
-<section id="input-section" class="px-10">
-    <h2 id="explanation-style-title" class="mt-8 mb-4 text-2xl font-semibold gradient-text">
+<section id="input-section" class="px-10 fade-in">
+    <h2 id="explanation-style-title" class="mt-8 mb-4 text-2xl font-semibold gradient-heading">
         Pick an Explanation Style
     </h2>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="ELI5">
-            <div class="text-blue-500 text-3xl">🧒</div>
+        <!-- ELI5 Style -->
+        <div class="p-6 bg-white shadow-md rounded-lg text-center style-btn flex flex-col h-full" data-style="ELI5">
+            <div class="text-4xl">👶</div>
             <h4 class="font-bold mt-2">Explain Like I'm 5</h4>
             <p class="text-gray-600 mt-3">Tired of searching up for the subreddit <span class="font-bold">r/explainlikeimfive</span>?</p>
+            <div class="mt-auto bg-yellow-50 p-3 rounded-lg">
+                <p class="text-sm text-yellow-800 font-semibold">Perfect for:</p>
+                <ul class="text-xs text-left list-disc pl-4 mt-2 text-yellow-700">
+                    <li>Complete beginners</li>
+                    <li>Breaking down complex ideas into simple analogies</li>
+                </ul>
+            </div>
         </div>
-        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="Student">
-            <div class="text-green-500 text-3xl">🎓</div>
+
+        <!-- Student Style -->
+        <div class="p-6 bg-white shadow-md rounded-lg text-center style-btn flex flex-col h-full" data-style="Student">
+            <div class="text-4xl">📚</div>
             <h4 class="font-bold mt-2">Student</h4>
             <p class="text-gray-600 mt-3">Need a quick refresher on a topic?</p>
+            <div class="mt-auto bg-blue-50 p-3 rounded-lg">
+                <p class="text-sm text-blue-800 font-semibold">Perfect for:</p>
+                <ul class="text-xs text-left list-disc pl-4 mt-2 text-blue-700">
+                    <li>Academic understanding</li>
+                    <li>Exam preparation</li>
+                </ul>
+            </div>
         </div>
-        <div class="p-4 bg-white shadow-md rounded-lg text-center style-btn" data-style="Grandparent">
-            <div class="text-gray-500 text-3xl">👵</div>
+
+        <!-- Grandparent Style -->
+        <div class="p-6 bg-white shadow-md rounded-lg text-center style-btn flex flex-col h-full" data-style="Grandparent">
+            <div class="text-4xl">👵</div>
             <h4 class="font-bold mt-2">Grandparent</h4>
             <p class="text-gray-600 mt-3">Want to understand your grandkids?</p>
+            <div class="mt-auto bg-purple-50 p-3 rounded-lg">
+                <p class="text-sm text-purple-800 font-semibold">Perfect for:</p>
+                <ul class="text-xs text-left list-disc pl-4 mt-2 text-purple-700">
+                    <li>Keeping up with new trends</li>
+                    <li>Joining conversations with younger generations</li>
+                </ul>
+            </div>
         </div>
     </div>
-    
 </section>
 
-<section id="input-section" class="text-center py-20">
-    <h3 class="text-2xl font-semibold gradient-text">Enter the concept you want explained</h3>
-    <input type="text" id="query" class="border p-3 w-1/2 mt-4 rounded-lg" placeholder="Type something...">
-    <button id="get-explanation" class="bg-pink-500 text-white px-6 py-3 rounded-lg mt-4">Explain</button>
-    <div id="explanation" class="mt-6 p-6 bg-white shadow-md rounded-lg hidden"></div>
+<section id="input-section" class="text-center py-20 fade-in">
+    <h3 class="text-2xl font-semibold gradient-heading mb-8">Enter the concept you want explained</h3>
+    <div class="input-container">
+        <input 
+            type="text" 
+            id="query" 
+            class="search-input" 
+            placeholder="Type something..."
+            onkeypress="if(event.key === 'Enter') document.getElementById('get-explanation').click()"
+        >
+        <button id="get-explanation" class="explain-btn">Explain</button>
+    </div>
+    <div class="mt-4 flex justify-center gap-2 selected-labels">
+        <span class="text-sm text-gray-300">Selected:</span>
+        <span id="selected-category-label" class="text-sm text-pink-400">No category</span>
+        <span class="text-sm text-gray-300">•</span>
+        <span id="selected-style-label" class="text-sm text-pink-400">No style</span>
+    </div>
+    <div id="explanation" class="mt-6 hidden"></div>
 </section>
 
 
-<section id="about" class="text-center py-20 px-10 max-w-4xl mx-auto">
-    <h3 class="text-2xl font-semibold gradient-text">About BrainRotLearn</h3>
-    <p class="text-gray-600 mt-3">Ever found yourself doom-scrolling through Reddit at 2 AM, searching for someone to explain quantum physics in a way that doesn't make your brain hurt? We've been there. BrainRotLearn was born from countless hours spent hunting through forums, trying to find explanations that don't require a PhD to understand.</p>
-    <p class="text-gray-600 mt-3">BrainRotLearn explains complicated topics to you like you're 5 years old - but without the baby talk. We break down complex ideas into bite-sized, easy-to-understand chunks that stick in your memory. No jargon, no unnecessary complexity, just clear explanations that actually make sense.</p>
-    <p class="text-gray-600 mt-3">BrainRotLearn cuts through the noise to give you the understanding you need, quickly and painlessly.</p>
+<section id="about" class="text-center py-20 px-10 max-w-4xl mx-auto fade-in">
+    <h3 class="text-2xl font-semibold gradient-text mb-8">About LearnYourWay</h3>
+    <div class="space-y-6">
+        <p class="text-gray-300">
+            Tired of getting lost in endless Reddit threads and YouTube videos trying to understand complex topics? 
+            LearnYourWay is your escape from the internet rabbit hole, transforming difficult concepts into 
+            crystal-clear explanations that actually stick.
+        </p>
+        <p class="text-gray-300">
+            Whether you're a student cramming for exams, a curious mind exploring new subjects, or someone 
+            trying to keep up with your tech-savvy grandkids, we've got you covered. From quantum physics 
+            to historical events, from coding concepts to artistic movements – we break it all down in a 
+            way that matches your preferred learning style.
+        </p>
+        <p class="text-gray-300">
+            Choose your topic, pick your explanation style, and let LearnYourWay turn those "Wait, what?" 
+            moments into "Aha!" revelations. Because learning shouldn't feel like your brain is melting – 
+            it should feel like unlocking a new superpower.
+        </p>
+    </div>
 </section>
 
 <script>
     let selectedCategory = "";
     let selectedStyle = "";
 
+    // Reset function
+    function resetPage() {
+        // Reset variables
+        selectedCategory = "";
+        selectedStyle = "";
+        
+        // Reset category buttons
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        categoryButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Reset style buttons
+        const styleButtons = document.querySelectorAll('.style-btn');
+        styleButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Reset the labels
+        const selectedCategoryLabel = document.getElementById('selected-category-label');
+        const selectedStyleLabel = document.getElementById('selected-style-label');
+        if (selectedCategoryLabel) selectedCategoryLabel.textContent = "No category";
+        if (selectedStyleLabel) selectedStyleLabel.textContent = "No style";
+        
+        // Reset input field
+        const queryInput = document.getElementById('query');
+        if (queryInput) {
+            queryInput.value = "";
+            queryInput.placeholder = "Type something...";
+        }
+
+        // Clear and hide explanation
+        const explanationDiv = document.getElementById('explanation');
+        if (explanationDiv) {
+            explanationDiv.classList.add('hidden');
+            explanationDiv.innerHTML = '';
+        }
+
+        // Hide reset button
+        const resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.style.display = 'none';
+        }
+
+        // Scroll to categories section
+        const categoriesSection = document.getElementById('categories');
+        if (categoriesSection) {
+            categoriesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    // Add event listener to reset button
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetPage);
+    }
+
     // Handle category selection
     document.querySelectorAll('.category-btn').forEach(button => {
         button.addEventListener('click', () => {
-            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
             button.classList.add('active');
             selectedCategory = button.getAttribute('data-category');
+            
+            // Update the selected category label
+            const selectedCategoryLabel = document.getElementById('selected-category-label');
+            if (selectedCategoryLabel) {
+                selectedCategoryLabel.textContent = selectedCategory;
+            }
+            
             const queryInput = document.getElementById('query');
             if (queryInput) {
                 queryInput.placeholder = `Ask me anything about ${selectedCategory}`;
             }
-            document.getElementById('input-section')?.scrollIntoView({ behavior: 'smooth' });
+            
+            // Scroll to explanation style section
+            const explanationStyleTitle = document.getElementById('explanation-style-title');
+            if (explanationStyleTitle) {
+                explanationStyleTitle.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Show reset button
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.style.display = 'flex';
+            }
         });
     });
 
     // Handle explanation style selection
     document.querySelectorAll('.style-btn').forEach(button => {
         button.addEventListener('click', () => {
-            document.querySelectorAll('.style-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.style-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
             button.classList.add('active');
             selectedStyle = button.getAttribute('data-style');
+            
+            // Update the selected style label
+            const selectedStyleLabel = document.getElementById('selected-style-label');
+            if (selectedStyleLabel) {
+                selectedStyleLabel.textContent = selectedStyle;
+            }
+
+            // Show reset button
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.style.display = 'flex';
+            }
+
+            // Scroll to input section
+            const inputSection = document.getElementById('input-section');
+            if (inputSection) {
+                inputSection.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     });
 
-    // Handle explanation request
-    document.getElementById('get-explanation')?.addEventListener('click', async () => {
+    // Initialize everything when the DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        // Add reset button event listener
+        const resetBtn = document.getElementById('resetBtn');
+        if (resetBtn) {
+            resetBtn.addEventListener('click', resetPage);
+            resetBtn.style.display = 'none'; // Initially hidden
+        }
+
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScroll);
+        
+        // Initial scroll check
+        handleScroll();
+    });
+
+    // Keep the existing getExplanation function (the async function that handles the API call)
+    async function getExplanation() {
         const queryInput = document.getElementById('query');
         const query = queryInput?.value?.trim();
+        const explanationContainer = document.getElementById('explanation');
         
         if (!query || !selectedCategory || !selectedStyle) {
             alert("Please select a category, explanation style, and enter a question.");
@@ -203,89 +727,118 @@
         }
 
         try {
-            const response = await fetch('http://localhost:5000/explain', {
+            // Add the animated loading indicator
+            explanationContainer.innerHTML = `
+                <div class="loading">
+                    Getting your explanation
+                    <div class="loading-dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>`;
+            explanationContainer.classList.remove('hidden');
+
+            const response = await fetch('/explain', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    query, 
-                    category: selectedCategory, 
-                    style: selectedStyle 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    query: query,
+                    category: selectedCategory,
+                    style: selectedStyle
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error('Network response was not ok');
             }
 
             const data = await response.json();
-            const explanationContainer = document.getElementById('explanation');
+
+            // Create explanation box
+            const explanationBox = document.createElement('div');
+            explanationBox.className = 'explanation-box';
             
-            if (!explanationContainer) return;
+            // Add copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-btn';
+            copyButton.innerHTML = 'Copy';
+            copyButton.onclick = async () => {
+                try {
+                    await navigator.clipboard.writeText(data.explanation);
+                    copyButton.innerHTML = 'Copied!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = 'Copy';
+                    }, 2000);
+                } catch (err) {
+                    console.error('Failed to copy text:', err);
+                }
+            };
+            
+            // Add explanation text
+            const explanationText = document.createElement('div');
+            explanationText.className = 'explanation-text';
+            explanationText.innerHTML = data.explanation.replace(/\n/g, '<br>');
+            
+            // Assemble the explanation box
+            explanationBox.appendChild(copyButton);
+            explanationBox.appendChild(explanationText);
+            
+            // Clear the container and add the new explanation
+            explanationContainer.innerHTML = '';
+            explanationContainer.appendChild(explanationBox);
+            explanationContainer.scrollIntoView({ behavior: 'smooth' });
 
-            if (data.explanation) {
-                // Process the explanation text to convert markdown-style bold (**text**) to HTML bold
-                let formattedExplanation = data.explanation.replace(/\n/g, '<br>');
-                // Convert markdown bold format to HTML
-                formattedExplanation = formattedExplanation.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                
-                explanationContainer.innerHTML = `
-                    <div class="explanation-box">
-                        <button id="copyButton" class="copy-btn">Copy</button>
-                        <div class="explanation-text">
-                            <p>${formattedExplanation}</p>
-                        </div>
-                    </div>
-                `;
-                
-                // Add the event listener directly to the button after creating it
-                document.getElementById('copyButton')?.addEventListener('click', function() {
-                    const explanationText = document.querySelector(".explanation-box p").innerText;
-                    navigator.clipboard.writeText(explanationText)
-                        .then(() => {
-                            const copyBtn = document.getElementById('copyButton');
-                            if (copyBtn) {
-                                copyBtn.innerText = "Copied!";
-                                setTimeout(() => {
-                                    copyBtn.innerText = "Copy";
-                                }, 2000);
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Failed to copy text:", err);
-                            alert("Failed to copy text to clipboard");
-                        });
-                });
-                
-                explanationContainer.classList.remove('hidden');
-                explanationContainer.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                console.error("Explanation not found in response:", data);
-                explanationContainer.innerHTML = `<p class='text-red-500'>${data.error || 'Something went wrong'}</p>`;
-                explanationContainer.classList.remove('hidden');
-            }
         } catch (error) {
-            console.error("Error fetching explanation:", error);
-            alert("An error occurred while fetching the explanation.");
+            console.error('Error:', error);
+            explanationContainer.innerHTML = `
+                <div class="error-message">
+                    Sorry, there was an error getting your explanation. Please try again.
+                </div>
+            `;
         }
-    });
+    }
 
-    // Remove the standalone copyToClipboard function since we're now handling it inline
+    // Add the handleScroll function
+    function handleScroll() {
+        const fadeElements = document.querySelectorAll('.fade-in');
+        fadeElements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementBottom = element.getBoundingClientRect().bottom;
+            const isVisible = (elementTop < window.innerHeight - 100) && (elementBottom >= 0);
+            
+            if (isVisible) {
+                element.classList.add('visible');
+            }
+        });
+    }
+
+    // Add click event listener to the explain button
+    const explainButton = document.getElementById('get-explanation');
+    if (explainButton) {
+        explainButton.addEventListener('click', getExplanation);
+    }
 </script>
 
 
-<footer class="border-t mt-20 py-8 px-10">
-    <div class="container mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div>
-                <h2 class="text-xl font-bold gradient-text mb-4">brainrotlearn</h2>
-            </div>
-        </div>
-        
-        <div class="text-center text-gray-500 text-sm mt-10">
-            © 2025 brainrotlearn. All rights reserved.
+<footer>
+    <div class="container mx-auto px-6">
+        <div class="footer-content">
+            © 2025 learnyourway. By <a href="https://www.linkedin.com/in/deepika-anbalagan/" class="footer-link">Deepika Anbalagan</a> &lt;3
         </div>
     </div>
 </footer>
+
+<!-- Add the reset button to the body -->
+<button id="resetBtn" class="fixed bottom-8 right-8 flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#d946ef] to-[#9333ea] text-white rounded-full hover:opacity-90 transition-all duration-300 shadow-lg" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+    </svg>
+    Start Over
+</button>
 
 </body>
 </html>
